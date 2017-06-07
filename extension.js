@@ -112,5 +112,18 @@ const WallpaperChanger = new Lang.Class({
     } else {
       Utils.debug('Can\'t write to org.gnome.desktop.background', this.__name__);
     }
+
+    const lockscreen_setting = new Gio.Settings({ schema: 'org.gnome.desktop.screensaver' });
+
+    if (lockscreen_setting.is_writable('picture-uri')) {
+      if (lockscreen_setting.set_string('picture-uri', 'file://' + path)) {
+        Utils.debug(path, this.__name__);
+        Gio.Settings.sync();
+      } else {
+        Utils.debug('Unable to set lockscreen wallpaper', this.__name__)
+      }
+    } else {
+      Utils.debug('Can\'t write to org.gnome.desktop.screensaver', this.__name__);
+    }
   }
 });
