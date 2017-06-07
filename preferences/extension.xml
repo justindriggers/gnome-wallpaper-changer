@@ -2,6 +2,12 @@
 
 <interface domain="wallpaper-changer">
 
+<object class="GtkAdjustment" id="AdjustSeconds">
+	<property name="lower">0</property>
+	<property name="upper">59</property>
+	<property name="step_increment">1</property>
+</object>
+
 <object class="GtkAdjustment" id="AdjustMinutes">
 	<property name="lower">0</property>
 	<property name="upper">59</property>
@@ -64,6 +70,25 @@
 							</child>
 							<child>
 								<object class="GtkComboBoxText" id="field_provider">
+								</object>
+							</child>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkBox">
+							<property name="margin-left">12</property>
+							<property name="spacing">12</property>
+							<child>
+								<object class="GtkLabel">
+									<property name="label" translatable="yes">Time to wait between changing wallpaper (seconds)</property>
+									<property name="hexpand">true</property>
+									<property name="halign">1</property>
+								</object>
+							</child>
+							<child>
+								<object class="GtkSpinButton" id="field_seconds">
+									<property name="adjustment">AdjustSeconds</property>
 								</object>
 							</child>
 						</object>

@@ -1,50 +1,42 @@
 const Lang = imports.lang;
 
 const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
 const GLib = imports.gi.GLib;
-const St = imports.gi.St;
 
 const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
 
-const Util = imports.misc.util;
 const Self = imports.misc.extensionUtils.getCurrentExtension();
 const Utils = Self.imports.utils;
 
 const TIMER = {
+  seconds: 0,
   minutes: 0,
   hours: 0,
   running: true,
 
   toSeconds: function () {
-    return this.minutes * 60 + this.hours * 3600
+    return this.seconds + this.minutes * 60 + this.hours * 3600
   }
 }
 
-let panelEntry;
+let changer;
 
 function init() {
 }
 
 function enable() {
-  panelEntry = new WallpaperChangerEntry();
-  Main.panel.addToStatusArea('wallpaper-changer-menu', panelEntry);
+  changer = new WallpaperChanger();
 }
 
 function disable() {
-  panelEntry.destroy();
 }
 
-const WallpaperChangerEntry = new Lang.Class({
-  Extends: PanelMenu.Button,
-  Name: 'WallpaperChangerEntry',
+const WallpaperChanger = new Lang.Class({
+  Name: 'WallpaperChanger',
 
   _init: function () {
-    this.parent(0, 'WallpaperChangerEntry');
-
     this.settings = Utils.getSettings();
+    this.settings.connect('changed::seconds', Lang.bind(this, this._applyTimer));
     this.settings.connect('changed::minutes', Lang.bind(this, this._applyTimer));
     this.settings.connect('changed::hours', Lang.bind(this, this._applyTimer));
     this.settings.connect('changed::provider', Lang.bind(this, this._applyProvider));
@@ -57,48 +49,11 @@ const WallpaperChangerEntry = new Lang.Class({
 
     this._applyProvider();
     this._applyTimer();
-
-    const icon = new St.Icon({
-      icon_name: 'preferences-desktop-wallpaper-symbolic',
-      style_class: 'system-status-icon'
-    });
-    this.actor.add_child(icon);
-
-    // Construct items
-    const nextItem = new PopupMenu.PopupMenuItem('Next Wallpaper');
-    const settingsItem = new PopupMenu.PopupMenuItem('Settings');
-    const separatorItem = new PopupMenu.PopupSeparatorMenuItem('');
-    const pauseItem = new PopupMenu.PopupMenuItem('Pause');
-
-    // Add items to menu
-    this.menu.addMenuItem(nextItem);
-    this.menu.addMenuItem(pauseItem);
-    this.menu.addMenuItem(separatorItem);
-    this.menu.addMenuItem(settingsItem);
-
-    // Bind events
-    settingsItem.connect('activate', Lang.bind(this, this._openSettings));
-    nextItem.connect('activate', Lang.bind(this, this._nextWallpaper));
-    pauseItem.connect('activate', Lang.bind(this, this._pauseToggle(pauseItem)));
-  },
-
-  _openSettings: function () {
-    Utils.debug('_openSettings', this.__name__);
-    Util.spawn(['gnome-shell-extension-prefs', Self.uuid]);
   },
 
   _nextWallpaper: function () {
     this.provider.next(Lang.bind(this, this._setWallpaper));
     this._resetTimer();
-  },
-
-  _pauseToggle: function (pauseItem) {
-    return function () {
-      TIMER.running = !TIMER.running;
-      Utils.debug('pause - timer running = ' + TIMER.running);
-      pauseItem.label.set_text(TIMER.running ? 'Pause' : 'Unpause');
-      this._resetTimer();
-    }
   },
 
   _applyProvider: function () {
@@ -115,6 +70,7 @@ const WallpaperChangerEntry = new Lang.Class({
 
   _applyTimer: function () {
     Utils.debug('_applyTimer', this.__name__);
+    TIMER.seconds = this.settings.get_int('seconds');
     TIMER.minutes = this.settings.get_int('minutes');
     TIMER.hours = this.settings.get_int('hours');
 

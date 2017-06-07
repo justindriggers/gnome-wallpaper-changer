@@ -4,6 +4,13 @@
   <schema id="org.gnome.shell.extensions.wallpaper-changer"
       path="/org/gnome/shell/extensions/wallpaper-changer/">
 
+    <key name="seconds" type="i">
+      <default>30</default>
+      <summary>Time between wallpaper changes in seconds</summary>
+      <description>How many seconds to wait before changing wallpaper</description>
+      <range min="0" max="59"/>
+    </key>
+
     <key name="minutes" type="i">
       <default>30</default>
       <summary>Time between wallpaper changes in minutes</summary>

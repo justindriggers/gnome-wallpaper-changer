@@ -24,6 +24,7 @@ function buildPrefsWidget() {
     providerList.append(provider, provider);
   }
 
+  settings.bind('seconds', main.get_object('field_seconds'), 'value', Gio.SettingsBindFlags.DEFAULT);
   settings.bind('minutes', main.get_object('field_minutes'), 'value', Gio.SettingsBindFlags.DEFAULT);
   settings.bind('hours', main.get_object('field_hours'), 'value', Gio.SettingsBindFlags.DEFAULT);
   settings.bind('provider', main.get_object('field_provider'), 'active-id', Gio.SettingsBindFlags.DEFAULT);

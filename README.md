@@ -1,10 +1,12 @@
 # gnome-wallpaper-changer
 GNOME extension to change wallpaper from providers
 
+Forked from https://github.com/Jomik/gnome-wallpaper-changer
+
 ## Install instructions
 ```
-git clone https://github.com/Jomik/gnome-wallpaper-changer.git ~/.local/share/gnome-shell/extensions/wallpaper-changer@jomik.org
-cd ~/.local/share/gnome-shell/extensions/wallpaper-changer@jomik.org
+git clone https://github.com/justindriggers/gnome-wallpaper-changer.git ~/.local/share/gnome-shell/extensions/wallpaper-changer@justindriggers.com
+cd ~/.local/share/gnome-shell/extensions/wallpaper-changer@justindriggers.com
 glib-compile-schemas ./schemas/
 ```
 

@@ -1,8 +1,8 @@
 {
-  "uuid": "wallpaper-changer@jomik.org",
+  "uuid": "wallpaper-changer@justindriggers.com",
   "name": "Wallpaper Changer",
   "description": "Change wallpaper regularly based on various providers",
   "shell-version": ["3.24"],
-  "url": "https://github.com/jomik/gnome-wallpaper-changer",
+  "url": "https://github.com/justindriggers/gnome-wallpaper-changer",
   "version": 6
 }
