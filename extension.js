@@ -29,6 +29,7 @@ function enable() {
 }
 
 function disable() {
+  TIMER.running = false;
 }
 
 const WallpaperChanger = new Lang.Class({
@@ -88,8 +89,8 @@ const WallpaperChanger = new Lang.Class({
       this.timer = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
         TIMER.toSeconds(),
         Lang.bind(this, function () {
-          this._nextWallpaper();
           this.timer = null;
+          this._nextWallpaper();
           return false;
         })
       );
@@ -104,7 +105,7 @@ const WallpaperChanger = new Lang.Class({
 
     if (background_setting.is_writable('picture-uri')) {
       if (background_setting.set_string('picture-uri', 'file://' + path)) {
-        Utils.debug(path, this.__name__);
+        Utils.debug('org.gnome.desktop.background = ' + path, this.__name__);
         Gio.Settings.sync();
       } else {
         Utils.debug('Unable to set wallpaper', this.__name__)
@@ -117,7 +118,7 @@ const WallpaperChanger = new Lang.Class({
 
     if (lockscreen_setting.is_writable('picture-uri')) {
       if (lockscreen_setting.set_string('picture-uri', 'file://' + path)) {
-        Utils.debug(path, this.__name__);
+        Utils.debug('org.gnome.desktop.screensaver = ' + path, this.__name__);
         Gio.Settings.sync();
       } else {
         Utils.debug('Unable to set lockscreen wallpaper', this.__name__)
